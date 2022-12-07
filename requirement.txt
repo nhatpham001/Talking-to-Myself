@@ -1,2 +1,5 @@
-flask-wtf
+flask == 2.2.2
+flask-wtf==1.0.1
 flask-sqlalchemy==2.5.1
+Werkzeug==2.2.2
+Flask-Bcrypt==1.0.1

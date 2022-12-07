@@ -1,7 +1,7 @@
 from flask import render_template, url_for, flash, redirect
 from webblog.models import User, Post
 from webblog.forms import RegistrationForm, LoginForm
-from webblog import app
+from webblog import app, db, bcrypt
     
 
 posts = [
@@ -34,8 +34,12 @@ def about():
 def register():
     form = RegistrationForm()
     if form.validate_on_submit():
-        flash(f'Account created for {form.username.data}!', 'success')
-        return redirect(url_for('home'))
+        hashed_pw = bcrypt.generate_password_hash(form.password.data).decode('utf-8')
+        user = User(username = form.username.data, email = form.email.data, password = hashed_pw)
+        db.session.add(user)
+        db.session.commit()
+        flash(f'Account created!', 'success')
+        return redirect(url_for('login'))
     return render_template('register.html', title='Register', form=form)
 
 
